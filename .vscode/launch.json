@@ -10,7 +10,9 @@
       "request": "launch",
       "runtimeExecutable": "node",
       "runtimeArgs": ["--nolazy", "-r", "ts-node/register/transpile-only"],
-
+      "env": {
+        "picotarget": "/Users/scott/Projects/NoBackup/sokoide/pico-os1/build/pico-os1.hex"
+      },
       "args": ["${workspaceFolder}/demo/emulator-run.ts"],
 
       "cwd": "${workspaceRoot}",

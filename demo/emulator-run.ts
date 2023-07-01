@@ -7,7 +7,8 @@ import { GDBTCPServer } from '../src/gdb/gdb-tcp-server';
 // Create an array with the compiled code of blink
 // Execute the instructions from this array, one by one.
 
-let mcu = new RP2040();
+var mcu: RP2040;
+var gdbServer: GDBTCPServer;
 
 function reloadHex() {
   let hexFile = process.env['picotarget'];
@@ -20,6 +21,10 @@ function reloadHex() {
 }
 
 function restart() {
+  mcu = new RP2040();
+  gdbServer = new GDBTCPServer(mcu, 3333);
+  console.log(`RP2040 GDB Server ready! Listening on port ${gdbServer.port}`);
+
   reloadHex();
   mcu.uart[0].onByte = (value) => {
     process.stdout.write(new Uint8Array([value]));
@@ -28,15 +33,11 @@ function restart() {
   mcu.execute();
 }
 
-const gdbServer = new GDBTCPServer(mcu, 3333);
-console.log(`RP2040 GDB Server ready! Listening on port ${gdbServer.port}`);
-
 process.on('SIGHUP', () => {
   console.log('SIGHUP');
   mcu.stop();
-  // mcu.uart[0].onByte = () => {};
+  gdbServer.stop();
 
-  mcu = new RP2040();
   restart();
 });
 

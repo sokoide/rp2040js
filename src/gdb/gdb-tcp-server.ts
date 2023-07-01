@@ -12,6 +12,10 @@ export class GDBTCPServer extends GDBServer {
     this.socketServer.on('connection', (socket) => this.handleConnection(socket));
   }
 
+  public stop() {
+    this.socketServer.close();
+  }
+
   handleConnection(socket: Socket) {
     this.info('GDB connected');
     socket.setNoDelay(true);
