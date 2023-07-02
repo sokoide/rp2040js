@@ -5,13 +5,20 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Attach",
+      "port": 9229,
+      "request": "attach",
+      "skipFiles": ["<node_internals>/**"],
+      "type": "node"
+    },
+    {
       "name": "Emulator Demo Project",
       "type": "node",
       "request": "launch",
       "runtimeExecutable": "node",
       "runtimeArgs": ["--nolazy", "-r", "ts-node/register/transpile-only"],
       "env": {
-        "picotarget": "/Users/scott/Projects/NoBackup/sokoide/pico-os1/build/pico-os1.hex"
+        "picotarget": "/Users/scott/repo/sokoide/pico-os1/build/pico-os1.hex"
       },
       "args": ["${workspaceFolder}/demo/emulator-run.ts"],
 

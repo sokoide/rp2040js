@@ -25,8 +25,24 @@ function restart() {
   gdbServer = new GDBTCPServer(mcu, 3333);
   console.log(`RP2040 GDB Server ready! Listening on port ${gdbServer.port}`);
 
+  // load a program
   reloadHex();
-  mcu.uart[0].onByte = (value) => {
+
+  // set uart0 input (PC's stdin -> RPi)
+  process.stdin.setRawMode(true);
+  process.stdin.resume();
+  process.stdin.setEncoding('ascii');
+  process.stdin.on('data', function (key: string) {
+    if (key === '\u0003') {
+      // ctrl-c
+      process.exit();
+    }
+    // TODO: ctrl chars are not yet supported
+    mcu.uart[0].onRx(key.charCodeAt(0));
+  });
+
+  // set uart0 output (RPi -> PC's stdout)
+  mcu.uart[0].onTx = (value) => {
     process.stdout.write(new Uint8Array([value]));
   };
   mcu.core.PC = 0x10000000;

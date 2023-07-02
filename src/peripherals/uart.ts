@@ -34,7 +34,10 @@ export class RPUART extends BasePeripheral implements Peripheral {
   private interruptMask = 0;
   private interruptStatus = 0;
 
-  public onByte?: (value: number) => void;
+  public onTx?: (value: number) => void;
+  public onRx(value: number) {
+    this.feedByte(value);
+  }
 
   constructor(rp2040: RP2040, name: string, readonly irq: number) {
     super(rp2040, name);
@@ -116,7 +119,7 @@ export class RPUART extends BasePeripheral implements Peripheral {
   writeUint32(offset: number, value: number) {
     switch (offset) {
       case UARTDR:
-        this.onByte?.(value & 0xff);
+        this.onTx?.(value & 0xff);
         break;
 
       case UARTLCR_H:
