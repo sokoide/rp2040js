@@ -28,7 +28,11 @@ function restart() {
   // load a program
   reloadHex();
 
+  // reset stdin listeners
+  process.stdin.removeAllListeners('data');
+
   // set uart0 input (PC's stdin -> RPi)
+  // disable echo back
   process.stdin.setRawMode(true);
   process.stdin.resume();
   process.stdin.setEncoding('ascii');

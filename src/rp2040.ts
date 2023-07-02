@@ -175,6 +175,8 @@ export class RP2040 {
     this.core.reset();
     this.pwm.reset();
     this.flash.fill(0xff);
+    this.uart[0].reset();
+    this.uart[1].reset();
   }
 
   readUint32(address: number) {

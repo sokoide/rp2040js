@@ -39,6 +39,14 @@ export class RPUART extends BasePeripheral implements Peripheral {
     this.feedByte(value);
   }
 
+  public reset() {
+    this.ctrlRegister = RXE | TXE;
+    this.lineCtrlRegister = 0;
+    this.rxFIFO = new FIFO(32);
+    this.interruptMask = 0;
+    this.interruptStatus = 0;
+  }
+
   constructor(rp2040: RP2040, name: string, readonly irq: number) {
     super(rp2040, name);
   }
